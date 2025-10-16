@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Ranking Results - AI Resume Ranker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .score-badge {
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+        }
+        .score-excellent { background-color: #28a745; }
+        .score-good { background-color: #17a2b8; }
+        .score-moderate { background-color: #ffc107; color: #212529; }
+        .score-poor { background-color: #dc3545; }
+        
+        .skill-tag {
+            display: inline-block;
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 0.25rem 0.5rem;
+            margin: 0.1rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        .resume-card {
+            transition: transform 0.2s ease-in-out;
+            border-left: 4px solid #dee2e6;
+        }
+        
+        .resume-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .resume-card.rank-1 { border-left-color: #28a745; }
+        .resume-card.rank-2 { border-left-color: #17a2b8; }
+        .resume-card.rank-3 { border-left-color: #ffc107; }
+        
+        .score-breakdown {
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+        
+        .job-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-robot me-2"></i>AI Resume Ranker
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('index') }}">
+                    <i class="fas fa-plus me-1"></i>New Analysis
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <!-- Job Summary -->
+        <div class="job-summary">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2><i class="fas fa-briefcase me-2"></i>{{ job_title }}</h2>
+                    <p class="mb-0">{{ job_description }}</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="bg-white bg-opacity-20 rounded p-3">
+                        <h4 class="mb-1">{{ total_resumes }}</h4>
+                        <small>Resumes Analyzed</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3><i class="fas fa-chart-line me-2"></i>Ranking Results</h3>
+            <button class="btn btn-outline-primary" onclick="exportResults()">
+                <i class="fas fa-download me-1"></i>Export Results
+            </button>
+        </div>
+
+        <!-- Ranking Results -->
+        <div class="row">
+            {% for resume in ranked_resumes %}
+            <div class="col-12 mb-4">
+                <div class="card resume-card rank-{{ resume.rank if resume.rank <= 3 else 'default' }}">
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Rank and Basic Info -->
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    {% if resume.rank == 1 %}
+                                        <div class="badge bg-warning text-dark fs-4 mb-2">
+                                            <i class="fas fa-trophy"></i> #{{ resume.rank }}
+                                        </div>
+                                    {% elif resume.rank == 2 %}
+                                        <div class="badge bg-secondary fs-4 mb-2">
+                                            <i class="fas fa-medal"></i> #{{ resume.rank }}
+                                        </div>
+                                    {% elif resume.rank == 3 %}
+                                        <div class="badge bg-warning text-dark fs-4 mb-2">
+                                            <i class="fas fa-award"></i> #{{ resume.rank }}
+                                        </div>
+                                    {% else %}
+                                        <div class="badge bg-light text-dark fs-4 mb-2">
+                                            #{{ resume.rank }}
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <h5 class="card-title">{{ resume.file_name }}</h5>
+                                    
+                                    {% if resume.error %}
+                                        <span class="badge bg-danger">Error</span>
+                                        <p class="text-danger small mt-2">{{ resume.error }}</p>
+                                    {% else %}
+                                        <!-- Overall Score -->
+                                        {% set score_class = 'score-excellent' if resume.overall_score >= 0.8 else 'score-good' if resume.overall_score >= 0.6 else 'score-moderate' if resume.overall_score >= 0.4 else 'score-poor' %}
+                                        <span class="badge score-badge {{ score_class }}">
+                                            {{ (resume.overall_score * 100) | round(1) }}%
+                                        </span>
+                                        
+                                        <div class="mt-2">
+                                            <small class="text-muted">
+                                                <i class="fas fa-clock me-1"></i>{{ resume.experience_years }} years
+                                            </small><br>
+                                            <small class="text-muted">
+                                                <i class="fas fa-graduation-cap me-1"></i>{{ resume.education_level.title() }}
+                                            </small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if not resume.error %}
+                            <!-- Score Breakdown -->
+                            <div class="col-md-4">
+                                <h6>Score Breakdown</h6>
+                                <div class="score-breakdown">
+                                    <div class="mb-2">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Skills:</span>
+                                            <strong>{{ (resume.skills_score * 100) | round(1) }}%</strong>
+                                        </div>
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar bg-primary" style="width: {{ resume.skills_score * 100 }}%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-2">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Experience:</span>
+                                            <strong>{{ (resume.experience_score * 100) | round(1) }}%</strong>
+                                        </div>
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar bg-success" style="width: {{ resume.experience_score * 100 }}%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-2">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Education:</span>
+                                            <strong>{{ (resume.education_score * 100) | round(1) }}%</strong>
+                                        </div>
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar bg-info" style="width: {{ resume.education_score * 100 }}%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-0">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Keywords:</span>
+                                            <strong>{{ (resume.keywords_score * 100) | round(1) }}%</strong>
+                                        </div>
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar bg-warning" style="width: {{ resume.keywords_score * 100 }}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Skills and Analysis -->
+                            <div class="col-md-5">
+                                <h6>Top Skills Found</h6>
+                                <div class="mb-3">
+                                    {% for skill in resume.top_skills %}
+                                        <span class="skill-tag">{{ skill }}</span>
+                                    {% endfor %}
+                                    {% if not resume.top_skills %}
+                                        <em class="text-muted">No specific skills identified</em>
+                                    {% endif %}
+                                </div>
+                                
+                                <h6>Analysis Summary</h6>
+                                <ul class="list-unstyled small">
+                                    <li><i class="fas fa-check-circle text-success me-1"></i>{{ resume.explanations.overall }}</li>
+                                    <li><i class="fas fa-cogs text-primary me-1"></i>{{ resume.explanations.skills }}</li>
+                                    <li><i class="fas fa-briefcase text-info me-1"></i>{{ resume.explanations.experience }}</li>
+                                    <li><i class="fas fa-graduation-cap text-warning me-1"></i>{{ resume.explanations.education }}</li>
+                                </ul>
+                                
+                                <div class="text-muted small">
+                                    <i class="fas fa-file-text me-1"></i>{{ resume.word_count }} words
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Summary Statistics -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-bar me-2"></i>Analysis Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <h4 class="text-success">{{ ranked_resumes | selectattr('overall_score', 'ge', 0.8) | list | length }}</h4>
+                                <small class="text-muted">Excellent Matches</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-info">{{ ranked_resumes | selectattr('overall_score', 'ge', 0.6) | selectattr('overall_score', 'lt', 0.8) | list | length }}</h4>
+                                <small class="text-muted">Good Matches</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-warning">{{ ranked_resumes | selectattr('overall_score', 'ge', 0.4) | selectattr('overall_score', 'lt', 0.6) | list | length }}</h4>
+                                <small class="text-muted">Moderate Matches</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-danger">{{ ranked_resumes | selectattr('overall_score', 'lt', 0.4) | list | length }}</h4>
+                                <small class="text-muted">Poor Matches</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="text-center mt-4">
+            <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus me-2"></i>Analyze More Resumes
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function exportResults() {
+            // Simple CSV export functionality
+            let csv = 'Rank,File Name,Overall Score,Skills Score,Experience Score,Education Score,Keywords Score,Experience Years,Education Level\n';
+            
+            {% for resume in ranked_resumes %}
+                {% if not resume.error %}
+                csv += '{{ resume.rank }},{{ resume.file_name }},{{ resume.overall_score }},{{ resume.skills_score }},{{ resume.experience_score }},{{ resume.education_score }},{{ resume.keywords_score }},{{ resume.experience_years }},{{ resume.education_level }}\n';
+                {% endif %}
+            {% endfor %}
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'resume_ranking_results.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Add animation on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.resume-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'all 0.5s ease';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 50);
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

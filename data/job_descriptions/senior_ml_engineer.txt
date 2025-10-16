@@ -1,0 +1,62 @@
+Job Title: Senior Machine Learning Engineer
+
+Company: TechInnovate Solutions
+Location: Remote/San Francisco, CA
+Experience Level: Senior (5+ years)
+
+Job Description:
+
+We are seeking a highly skilled Senior Machine Learning Engineer to join our AI team and drive the development of cutting-edge machine learning solutions. The ideal candidate will have extensive experience in designing, implementing, and deploying ML models at scale.
+
+Key Responsibilities:
+- Design and develop machine learning models for various business applications
+- Implement end-to-end ML pipelines from data ingestion to model deployment
+- Collaborate with data scientists and software engineers to productionize ML solutions
+- Optimize model performance and scalability for production environments
+- Mentor junior team members and provide technical guidance
+- Stay current with latest ML research and technologies
+
+Required Skills and Qualifications:
+- Master's degree in Computer Science, Machine Learning, or related field
+- 5+ years of experience in machine learning and software development
+- Expert-level proficiency in Python and machine learning libraries (TensorFlow, PyTorch, scikit-learn)
+- Strong experience with cloud platforms (AWS, Azure, or GCP)
+- Proficiency in data manipulation tools (pandas, numpy, SQL)
+- Experience with MLOps tools and practices (MLflow, Kubeflow, Docker, Kubernetes)
+- Knowledge of distributed computing frameworks (Spark, Dask)
+- Experience with deep learning architectures and neural networks
+- Strong understanding of statistical methods and experimental design
+- Excellent problem-solving and analytical skills
+
+Preferred Qualifications:
+- PhD in Machine Learning, Statistics, or related quantitative field
+- Experience with natural language processing (NLP) and computer vision
+- Knowledge of reinforcement learning algorithms
+- Experience with A/B testing and experimentation platforms
+- Familiarity with big data technologies (Hadoop, Kafka)
+- Publications in top-tier ML conferences or journals
+- Experience with edge computing and model optimization
+- Knowledge of AutoML and neural architecture search
+
+Technical Requirements:
+- Expertise in Python, with knowledge of R or Scala as a plus
+- Experience with version control systems (Git) and collaborative development
+- Strong background in algorithms, data structures, and software engineering principles
+- Experience with monitoring and observability tools for ML systems
+- Knowledge of data privacy and security best practices
+- Familiarity with agile development methodologies
+
+What We Offer:
+- Competitive salary range: $150,000 - $200,000
+- Stock options and performance bonuses
+- Comprehensive health insurance and benefits package
+- Flexible work arrangements and remote work options
+- Professional development budget for conferences and training
+- Cutting-edge technology stack and research opportunities
+- Collaborative and innovative work environment
+
+About the Team:
+Join a team of 15+ ML engineers and data scientists working on products that impact millions of users. You'll have the opportunity to work on diverse projects including recommendation systems, computer vision applications, and natural language processing solutions.
+
+Application Process:
+Please submit your resume along with a cover letter highlighting your relevant experience. Include links to your GitHub profile, publications, or any relevant projects that demonstrate your ML expertise.

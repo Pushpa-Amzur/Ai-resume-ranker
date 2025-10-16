@@ -1,0 +1,49 @@
+Michael Chen
+Full Stack Developer
+
+Contact Information:
+Email: michael.chen@email.com
+Phone: (555) 456-7890
+Portfolio: michaelchen.dev
+
+Professional Summary:
+Full Stack Developer with 3 years of experience building modern web applications. Proficient in JavaScript frameworks, responsive design, and RESTful API development. Passionate about creating user-friendly interfaces and efficient backend systems.
+
+Technical Skills:
+- Frontend: JavaScript, TypeScript, React, Vue.js, HTML5, CSS3, SASS
+- Backend: Node.js, Express.js, Python, Django
+- Databases: MySQL, PostgreSQL, MongoDB
+- Tools: Git, Webpack, Docker, Postman
+- Cloud: AWS, Heroku, Netlify
+- Testing: Jest, Cypress, Mocha
+
+Professional Experience:
+
+Full Stack Developer | WebDev Agency | 2021 - Present
+- Developed responsive web applications for 20+ clients using React and Node.js
+- Built RESTful APIs and integrated third-party services
+- Collaborated with designers to implement pixel-perfect UI components
+- Optimized application performance resulting in 30% faster load times
+
+Junior Developer | Tech Startup | 2020 - 2021
+- Contributed to development of SaaS platform using Vue.js and Python
+- Implemented user authentication and authorization systems
+- Participated in code reviews and agile development processes
+- Fixed bugs and maintained existing codebase
+
+Intern | Software Company | 2020
+- Assisted in development of mobile-responsive websites
+- Learned modern development practices and version control with Git
+- Created documentation for development processes
+
+Education:
+Bachelor of Science in Computer Science | State University | 2020
+
+Certifications:
+- freeCodeCamp Full Stack Web Development
+- Google Cloud Platform Fundamentals
+
+Projects:
+- E-commerce Platform: Full-stack application with React, Node.js, and MongoDB
+- Task Management App: Real-time collaboration tool using WebSocket
+- Weather Dashboard: React application consuming external APIs

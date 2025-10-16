@@ -316,5 +316,6 @@ For questions and support:
 - [ ] Real-time collaborative ranking
 - [ ] Integration with job boards APIs
 - [ ] Advanced analytics and reporting
-- [ ] Mobile-responsive design improvements#   A i - r e s u m e - r a n k e r  
+- [ ] Mobile-responsive design improvements#   A i - r e s u m e - r a n k e r 
+ 
  
